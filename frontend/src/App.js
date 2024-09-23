@@ -7,6 +7,8 @@ function App() {
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
 
@@ -34,7 +36,7 @@ function App() {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/upload', {
+      const response = await fetch(`${API_URL}/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -44,7 +46,7 @@ function App() {
       }
 
       const data = await response.json();
-      alert(data.message); // Display success message
+      alert(data.message);
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Error uploading file. Please try again.');
@@ -62,7 +64,7 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/ask', {
+      const response = await fetch(`${API_URL}/ask`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
