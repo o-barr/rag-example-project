@@ -35,6 +35,7 @@ vectorstore = None
 full_document_text = ""  # Initialize full_document_text
 
 
+
 # Function to process a PDF document and create vectorized embeddings
 def process_document(file_path):
     global vectorstore, full_document_text  # Include full_document_text
@@ -123,6 +124,7 @@ def classify_question(question):
 # Route for uploading PDFs
 @app.route("/upload", methods=["POST"])
 @cross_origin()
+
 def upload_document():
     global vectorstore
     logging.info("Received a request to upload a file")  # Info: Request received
@@ -133,6 +135,7 @@ def upload_document():
                 "No file part in the request"
             )  # Warning: No file in the request
             return jsonify({"error": "No file part in the request"}), 400
+
 
         file = request.files["file"]
         logging.info(f"File received: {file.filename}")  # Info: File received
@@ -181,6 +184,8 @@ def upload_document():
         return jsonify({"error": "An unexpected error occurred"}), 500
 
 
+
+
 def refine_answer_with_gpt(question, initial_answer):
     # Format the conversation as a chat history
     messages = [
@@ -201,6 +206,7 @@ def refine_answer_with_gpt(question, initial_answer):
             messages=messages,
             temperature=0.2,
             max_tokens=500,
+
         )
         refined_answer = response.choices[0].message.content
         logging.debug(f"Refined answer: {refined_answer}")
@@ -255,6 +261,7 @@ def ask_question():
     question = data.get("question")
 
     logging.info(f"Received question: {question}")
+
 
     if not vectorstore or not full_document_text:
         logging.warning("No document uploaded or vectorized yet")

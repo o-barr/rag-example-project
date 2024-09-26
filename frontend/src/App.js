@@ -7,7 +7,7 @@ function App() {
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+  const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
