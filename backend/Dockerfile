@@ -4,20 +4,18 @@ FROM python:3.10-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file into the container
+# Copy requirements and install dependencies
 COPY requirements.txt .
-
-# Upgrade pip to avoid dependency issues
-RUN pip install --upgrade pip
-
-# Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code into the container
+# Copy the rest of the application code
 COPY . .
 
-# Expose the port the app runs on
+# Create the uploaded_files directory and set permissions
+RUN mkdir -p /app/uploaded_files && chmod -R 755 /app/uploaded_files
+
+# Expose the port (optional)
 EXPOSE 8000
 
-# Command to run the Flask app
+# Run the Flask app
 CMD ["python", "main.py"]
