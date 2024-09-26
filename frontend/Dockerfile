@@ -1,21 +1,28 @@
-# Use the official Node.js image as the base image
+# Use node:18-alpine as the base image
 FROM node:18-alpine
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json
+# Copy the package.json and package-lock.json files
 COPY package*.json ./
 
-# Install the dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code into the container
+# Copy the rest of the application code
 COPY . .
 
-# Expose the port the app runs on
+# Build the React app with the environment variable
+ARG REACT_APP_BACKEND_URL
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+RUN npm run build
+
+# Install 'serve' to serve the static files
+RUN npm install -g serve
+
+# Expose port 3000
 EXPOSE 3000
 
-# Command to start the app
-CMD ["npm", "start"]
-
+# Start the application
+CMD ["serve", "-s", "build", "-l", "3000"]
