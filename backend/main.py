@@ -35,7 +35,6 @@ vectorstore = None
 full_document_text = ""  # Initialize full_document_text
 
 
-
 # Function to process a PDF document and create vectorized embeddings
 def process_document(file_path):
     global vectorstore, full_document_text  # Include full_document_text
@@ -124,7 +123,6 @@ def classify_question(question):
 # Route for uploading PDFs
 @app.route("/upload", methods=["POST"])
 @cross_origin()
-
 def upload_document():
     global vectorstore
     logging.info("Received a request to upload a file")  # Info: Request received
@@ -135,7 +133,6 @@ def upload_document():
                 "No file part in the request"
             )  # Warning: No file in the request
             return jsonify({"error": "No file part in the request"}), 400
-
 
         file = request.files["file"]
         logging.info(f"File received: {file.filename}")  # Info: File received
@@ -184,8 +181,6 @@ def upload_document():
         return jsonify({"error": "An unexpected error occurred"}), 500
 
 
-
-
 def refine_answer_with_gpt(question, initial_answer):
     # Format the conversation as a chat history
     messages = [
@@ -206,7 +201,6 @@ def refine_answer_with_gpt(question, initial_answer):
             messages=messages,
             temperature=0.2,
             max_tokens=500,
-
         )
         refined_answer = response.choices[0].message.content
         logging.debug(f"Refined answer: {refined_answer}")
@@ -221,7 +215,7 @@ def generate_answer_with_full_document(question, full_document_text):
     Generate an answer using the full document text.
     """
     # Optionally limit the document length to avoid exceeding token limits
-    MAX_DOCUMENT_CHARACTERS = 8000  # Adjust based on your model's token limit
+    MAX_DOCUMENT_CHARACTERS = 100000  # Adjust based on your model's token limit
     if len(full_document_text) > MAX_DOCUMENT_CHARACTERS:
         logging.warning("Document is too long; truncating to fit token limit.")
         full_document_text = full_document_text[:MAX_DOCUMENT_CHARACTERS]
@@ -261,7 +255,6 @@ def ask_question():
     question = data.get("question")
 
     logging.info(f"Received question: {question}")
-
 
     if not vectorstore or not full_document_text:
         logging.warning("No document uploaded or vectorized yet")
